@@ -27,7 +27,7 @@ public class BoardController {
 		ModelAndView mv = new ModelAndView("/board/boardList");
 		//서비스 호출
 		List<BoardDto> list = this.boardService.selectBoardList();
-		//서비스 호출 결과를 뷰에 list라는 이름으로 저장
+		//서비스 호출 결과를 뷰에 list라는 이름으로 저장 
 		mv.addObject("list", list);
 		
 		return mv;
