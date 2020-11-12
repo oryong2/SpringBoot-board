@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	mapper의 namespace는 매퍼 인터페이스패키지.인터페이스명 으로 설정한다.
+	아래의 namespace는 select id로 지정한 매퍼인터페이스의 메서드를 찾기 위함이므로
+ -->
+<mapper namespace="board.board.mapper.BoardMapper">
+
+	<!-- 
+		id는 매퍼 인터페이스의 메서드명과 동일
+		resultType과 parameterType은 항상 full path 지정해야 한다. 
+			(HashMap등도 java.util.HashMap으로 설정해야함.단 MyBatis에서 사용하는 별칭으로 hashmap 등 사용가능) 
+	-->
+	<select id="selectBoardList" resultType="board.board.dto.BoardDto">
+		<![CDATA[
+			SELECT
+				board_idx,
+				title,
+				hit_cnt,
+				DATE_FORMAT(created_datetime, '%Y.%m.%d %H:%i:%s') AS created_datetime
+			FROM
+				t_board
+			WHERE
+				deleted_yn = 'N'
+			ORDER BY board_idx DESC
+		]]>
+	</select>
+</mapper>
