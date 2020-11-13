@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import board.board.dto.BoardDto;
@@ -18,7 +19,8 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
-	//아래 경로로 호출하면 Spring Dispatcher는 호출된 주수와 @RequestMapping이 동일한 메서드를 찾아서 실행
+	//아래 경로로 호출하면 Spring Dispatcher는 호출된 주소와 @RequestMapping이 동일한 메서드를 찾아서 실행
+	//"글목록" 보기 화면 조회용
 	@RequestMapping("/board/openBoardList.do")
 	public ModelAndView openBoardList() throws Exception{
 		
@@ -33,5 +35,42 @@ public class BoardController {
 		return mv;
 		
 	}
+	
+	//"글목록"-"글쓰기" 버튼 클릭시 "글쓰기" 화면 return 
+	@RequestMapping("/board/openBoardWrite.do")
+	public String openBoardWrite() throws Exception{
+		return "/board/boardWrite";
+	}
+	
+	//"글쓰기"-"저장" 버튼 클릭시 게시글 저장 후 "글목록"화면 redirect
+	@RequestMapping("/board/insertBoard.do")
+	public String insertBoard(BoardDto board) throws Exception{
+		this.boardService.insertBoard(board);
+		return "redirect:/board/openBoardList.do";
+	}
+	
+	//게시글 상세
+	@RequestMapping("/board/openBoardDetail.do")
+	public ModelAndView openBoardDetail(@RequestParam int board_idx) throws Exception{
+		ModelAndView mv = new ModelAndView("/board/boardDetail");
+		BoardDto board = this.boardService.selectBoardDetail(board_idx);
+		mv.addObject("board",board);
+		return mv;	
+	}
+	
+	//게시글 수정
+	@RequestMapping("/board/updateBoard.do")
+	public String updateBoard(BoardDto board) throws Exception {
+		this.boardService.updateBoard(board);
+		return "redirect:/board/openBoardList.do";
+	}
+	
+	//게시글 삭제
+	@RequestMapping("/board/deleteBoard.do")
+	public String deleteBoard(@RequestParam int boardIdx) throws Exception {
+		this.boardService.deleteBoard(boardIdx);
+		return "redirect:/board/openBoardList.do"; 
+	}
+	
 
 }

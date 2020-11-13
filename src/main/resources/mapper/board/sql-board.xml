@@ -12,6 +12,7 @@
 		resultType과 parameterType은 항상 full path 지정해야 한다. 
 			(HashMap등도 java.util.HashMap으로 설정해야함.단 MyBatis에서 사용하는 별칭으로 hashmap 등 사용가능) 
 	-->
+	<!-- 게시글 조회 리스트 -->
 	<select id="selectBoardList" resultType="board.board.dto.BoardDto">
 		<![CDATA[
 			SELECT
@@ -26,4 +27,80 @@
 			ORDER BY board_idx DESC
 		]]>
 	</select>
+	
+	<!-- 게시글 등록 -->
+	<insert id="insertBoard" parameterType="board.board.dto.BoardDto">
+		<![CDATA[
+			INSERT INTO t_board 
+			(
+				title
+				, contents
+				, created_datetime
+				, creator_id
+			)
+			VALUES
+			(
+				#{title}
+				,#{contents}
+				,NOW()
+				,'admin'
+			)
+		]]>
+	</insert>
+	
+	<!-- 조회수 증가  -->
+	<update id="updateHitCount" parameterType="int">
+		<![CDATA[
+			UPDATE t_board
+			SET
+				hit_cnt = hit_cnt +1
+			WHERE
+				board_idx = #{boardIdx}
+		]]>
+	</update>
+
+	<!-- 게시글 상세 조회 -->	
+	<select id="selectBoardDetail" parameterType="int" resultType="board.board.dto.BoardDto">
+		<![CDATA[
+			SELECT
+				board_idx
+				, title
+				, contents
+				, hit_cnt
+				, DATE_FORMAT(created_datetime, '%Y.%m.%d %H:%i:%s') AS created_datetime
+				, creator_id
+			FROM
+				t_board
+			WHERE
+				board_idx = #{boardIdx}
+				AND deleted_yn='N'
+		]]>
+	</select>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateBoard" parameterType="board.board.dto.BoardDto">
+		<![CDATA[
+			UPDATE t_board
+			SET
+				title = #{title}
+				, contents = #{contents}
+				, updated_datetime = NOW()
+				, updater_id = 'admin'
+			WHERE
+				board_idx = #{boardIdx}
+		]]>
+	</update>
+		
+	<!-- 게시글 삭제  -->
+	<delete id="deleteBoard" parameterType="int">
+		<![CDATA[
+			UPDATE t_board
+			SET
+				deleted_yn = 'Y'
+				, updated_datetime = NOW()
+				, updater_id = 'admin'
+			WHERE
+				board_idx = #{boardIdx}
+		]]>
+	</delete>
 </mapper>
