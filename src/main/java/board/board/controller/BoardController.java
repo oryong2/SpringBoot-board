@@ -2,6 +2,8 @@ package board.board.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +20,15 @@ public class BoardController {
 	//비즈니스 로직을 처리하는 서비스빈
 	@Autowired
 	private BoardService boardService;
+		
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	//아래 경로로 호출하면 Spring Dispatcher는 호출된 주소와 @RequestMapping이 동일한 메서드를 찾아서 실행
+		//아래 경로로 호출하면 Spring Dispatcher는 호출된 주소와 @RequestMapping이 동일한 메서드를 찾아서 실행
 	//"글목록" 보기 화면 조회용
 	@RequestMapping("/board/openBoardList.do")
 	public ModelAndView openBoardList() throws Exception{
+		
+		logger.debug("openBoardList");
 		
 		//ModelAndView : 요청 결과에 해당하는 Model 저장과 요청 결과를 보여줄 화면인 View 정보를 관리하는 클래스
 		//생성자로 결과를 보여줄 화면 경로를 지정. Thymeleaf 와 같은 템플릿을 사용하는 경우 .html 확장자 생략가능
