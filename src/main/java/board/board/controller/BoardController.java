@@ -1,14 +1,22 @@
 package board.board.controller;
 
+import java.io.File;
+import java.net.URLEncoder;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import board.board.dto.BoardDto;
+import board.board.dto.BoardFileDto;
 import board.board.service.BoardService;
 
 //Spring MVC 컨트롤러를 의미
@@ -33,7 +41,6 @@ public class BoardController {
 		mv.addObject("list", list);
 		
 		return mv;
-		
 	}
 	
 	//"글목록"-"글쓰기" 버튼 클릭시 "글쓰기" 화면 return 
@@ -44,8 +51,8 @@ public class BoardController {
 	
 	//"글쓰기"-"저장" 버튼 클릭시 게시글 저장 후 "글목록"화면 redirect
 	@RequestMapping("/board/insertBoard.do")
-	public String insertBoard(BoardDto board) throws Exception{
-		this.boardService.insertBoard(board);
+	public String insertBoard(BoardDto board, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception{
+		this.boardService.insertBoard(board, multipartHttpServletRequest);
 		return "redirect:/board/openBoardList.do";
 	}
 	
@@ -56,6 +63,29 @@ public class BoardController {
 		BoardDto board = this.boardService.selectBoardDetail(board_idx);
 		mv.addObject("board",board);
 		return mv;	
+	}
+	
+	//첨부파일 다운로드
+	@RequestMapping("/board/downloadBoardFile.do")
+	public void downloadBoardFile(@RequestParam int idx
+								, @RequestParam int boardIdx
+								, HttpServletResponse response) throws Exception{
+		BoardFileDto boardFile = this.boardService.selectBoardFileInfo(idx, boardIdx);
+		if(ObjectUtils.isEmpty(boardFile) == false) {
+			String fileName = boardFile.getOriginalFileName();
+			
+			byte[] files = FileUtils.readFileToByteArray(new File(boardFile.getStoredFilePath()));
+			
+			response.setContentType("application/octet-stream");
+			response.setContentLength(files.length);
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(fileName, "UTF-8")+"\";");
+			response.setHeader("Content-Transfer-Encoding", "binary");
+			
+			response.getOutputStream().write(files);
+			response.getOutputStream().flush();
+			response.getOutputStream().close();
+		}
+		
 	}
 	
 	//게시글 수정
