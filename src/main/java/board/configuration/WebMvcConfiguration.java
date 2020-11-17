@@ -2,6 +2,7 @@ package board.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -24,5 +25,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer{
 		//Upload 파일 크기 제한 5MB
 		commonMultipartResolver.setMaxUploadSize(5*1024*1024);
 		return commonMultipartResolver;
+	}
+	
+	@Bean
+	public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+		return new HiddenHttpMethodFilter();
 	}
 }
