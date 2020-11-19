@@ -22,7 +22,11 @@ import org.springframework.web.servlet.ModelAndView;
 import board.board.dto.BoardDto;
 import board.board.dto.BoardFileDto;
 import board.board.service.BoardService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
+//API문서화를 위한 Swagger 어노테이션
+@Api(description="게시판 REST APi")
 //REST API를 위한 Controller. 
 //@RestController = @Controller + @ResponseBody로 요청의 결과 값을 JSON 형태로 Web response body에 만들어 줌. 
 @RestController
@@ -32,6 +36,8 @@ public class RestBoardApiController {
 	@Autowired
 	private BoardService boardService;
 
+	//Swagger 설명 추가
+	@ApiOperation(value = "게시글 조회")
 	//아래 경로로 호출하면 Spring Dispatcher는 호출된 주소와 @RequestMapping이 동일한 메서드를 찾아서 실행
 	//"글목록" 조회용 REST API
 	@RequestMapping(value="/api/board", method = RequestMethod.GET)

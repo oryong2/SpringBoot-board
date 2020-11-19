@@ -16,12 +16,20 @@
 			<Pattern>%d %5p %m%n</Pattern>
 		</encoder>   
 	</appender>
-
-	<!-- 로거 -->
-	<!-- logger는 로그를 출력하는 요소로 level 속성을 통해 log 레벨을 조정하여 appender에게 전달 -->
-	<logger name="board" level="DEBUG" appender-ref="console"/>
-	<logger name="jdbc.sqlonly" level="INFO" appender-ef="console-infolog"/>
-	<logger name="jdbc.resultsettable" level="INFO" appender-ef="console-infolog"/>
+	
+	<springProfile name="dev">
+		<!-- 로거 -->
+		<!-- logger는 로그를 출력하는 요소로 level 속성을 통해 log 레벨을 조정하여 appender에게 전달 -->
+		<logger name="board" level="DEBUG" appender-ref="console"/>
+		<logger name="jdbc.sqlonly" level="INFO" appender-ef="console-infolog"/>
+		<logger name="jdbc.resultsettable" level="INFO" appender-ef="console-infolog"/>	
+	</springProfile>
+	
+	<springProfile name="prod">
+		<!-- 로거 -->
+		<!-- logger는 로그를 출력하는 요소로 level 속성을 통해 log 레벨을 조정하여 appender에게 전달 -->
+		<logger name="board" level="INFO" appender-ref="console"/>
+	</springProfile>
 	
 	<!-- 루트 로거 -->
     <root level="off">
