@@ -1,0 +1,8 @@
+logging:
+  config: classpath:logback-${spring.profiles.active}.xml
+  
+spring:
+  cloud:
+    config:
+      uri: http://34.64.151.27:8888
+      name: cloud-config

@@ -13,7 +13,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 //application.properties 를 사용할 수 있도록 위치 지정
 //@PropertySource 추가하여 다른 설정 파일도 사용 가능
-@PropertySource("classpath:/application.properties")
+//applicaation.yml 로 전환되면서 주석처리 @PropertySource("classpath:/application.properties")
 public class DS4HikariConfiguration {
 	
 	@Bean
